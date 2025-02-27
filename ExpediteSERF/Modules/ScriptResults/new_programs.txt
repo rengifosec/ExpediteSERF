@@ -1,0 +1,56 @@
+﻿Newly Installed Programs:
+-------------------------------------------
+
+  + Caption : PuTTY
+  + Vendor : Simon Tatham
+  + Name : PuTTY
+  + Version : 0.81.0
+  + IdentifyingNumber : {440A9C0B-8135-4E95-81D3-B2E7FF294BBC}
+
+  + Caption : OpenSSL
+  + Vendor : openssl.org
+  + Name : OpenSSL
+  + Version : 3.0.7
+  + IdentifyingNumber : {1A5B60CD-C46A-4346-B3F7-66980FA66B1F}
+Newly Installed Programs:
+-------------------------------------------
+
+  + Caption : PuTTY
+  + Vendor : Simon Tatham
+  + Name : PuTTY
+  + Version : 0.81.0
+  + IdentifyingNumber : {440A9C0B-8135-4E95-81D3-B2E7FF294BBC}
+
+  + Caption : OpenSSL
+  + Vendor : openssl.org
+  + Name : OpenSSL
+  + Version : 3.0.7
+  + IdentifyingNumber : {1A5B60CD-C46A-4346-B3F7-66980FA66B1F}
+Newly Installed Programs:
+-------------------------------------------
+
+  + Caption : PuTTY
+  + Vendor : Simon Tatham
+  + Name : PuTTY
+  + Version : 0.81.0
+  + IdentifyingNumber : {440A9C0B-8135-4E95-81D3-B2E7FF294BBC}
+
+  + Caption : OpenSSL
+  + Vendor : openssl.org
+  + Name : OpenSSL
+  + Version : 3.0.7
+  + IdentifyingNumber : {1A5B60CD-C46A-4346-B3F7-66980FA66B1F}
+Newly Installed Programs:
+-------------------------------------------
+
+  + Caption : PuTTY
+  + Vendor : Simon Tatham
+  + Name : PuTTY
+  + Version : 0.81.0
+  + IdentifyingNumber : {440A9C0B-8135-4E95-81D3-B2E7FF294BBC}
+
+  + Caption : OpenSSL
+  + Vendor : openssl.org
+  + Name : OpenSSL
+  + Version : 3.0.7
+  + IdentifyingNumber : {1A5B60CD-C46A-4346-B3F7-66980FA66B1F}

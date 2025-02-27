@@ -1,0 +1,18 @@
+Program: OpenSSL
+Version: 3.0.7
+MITRE: https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=OpenSSL
+NVD NIST: https://nvd.nist.gov/vuln/search/results?query=OpenSSL&search_type=all
+Google Search: https://www.google.com/search?q=CVE+OpenSSL+3.0.7+site%3acve.mitre.org+OR+site%3anvd.nist.gov
+--------------------------------------------------
+Program: WinZip 27.0
+Version: 27.0.15240
+MITRE: https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=WinZip+27.0
+NVD NIST: https://nvd.nist.gov/vuln/search/results?query=WinZip+27.0&search_type=all
+Google Search: https://www.google.com/search?q=CVE+WinZip+27.0+27.0.15240+site%3acve.mitre.org+OR+site%3anvd.nist.gov
+--------------------------------------------------
+Program: WinZip Command Line Support Add-On 6.0
+Version: 6.0.14567
+MITRE: https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=WinZip+Command+Line+Support+Add-On+6.0
+NVD NIST: https://nvd.nist.gov/vuln/search/results?query=WinZip+Command+Line+Support+Add-On+6.0&search_type=all
+Google Search: https://www.google.com/search?q=CVE+WinZip+Command+Line+Support+Add-On+6.0+6.0.14567+site%3acve.mitre.org+OR+site%3anvd.nist.gov
+--------------------------------------------------
