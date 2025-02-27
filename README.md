@@ -2,6 +2,8 @@
 
 ExpediteSERF is a comprehensive cybersecurity scanning workflow that automates the execution of various security checks, including SCAP Compliance Checker scans, comparisons, baseline captures, and port scans. This tool is designed to streamline the process of identifying and addressing security vulnerabilities in your systems.
 
+![ExpediteSERF](./assets/expediteserf.png)
+
 ## Features
 
 - **SCC Scan**: Runs the SCAP Compliance Checker scan.
@@ -31,6 +33,8 @@ ExpediteSERF/
 │   ├── CVE_Finder.ps1
 │   ├── ScriptResults/
 │   └── Logs/
+└── assets/
+    └── expediteserf.png
 ```
 
 ## Configuration
@@ -94,4 +98,13 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any questions or issues, please contact Alejandro Rengifo at [your-email@example.com].
+
+## Acknowledgements
+
+- Jason Wheeler for the initial version of the SERF Capture script.
+- The open-source community for their invaluable contributions.
