@@ -100,11 +100,6 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
 
-## Contact
-
-For any questions or issues, please contact Alejandro Rengifo at [your-email@example.com].
-
 ## Acknowledgements
 
 - Jason Wheeler for the initial version of the SERF Capture script.
-- The open-source community for their invaluable contributions.
