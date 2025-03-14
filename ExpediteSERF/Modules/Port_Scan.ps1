@@ -23,10 +23,10 @@ Function Log-Message {
 
 # Clean Header with Subtle Accents
 Log-Message "Starting Nmap Intense Port Scan"
-Write-Host "`n==================================" -ForegroundColor Magenta
+Write-Host "`n===========================================" -ForegroundColor Magenta
 Write-Host "  Running " -NoNewline
 Write-Host "Nmap - Intense Port Scan" -ForegroundColor Cyan
-Write-Host "----------------------------------" -ForegroundColor Magenta
+Write-Host "-------------------------------------------" -ForegroundColor Magenta
 
 # Get local IPv4 address (Exclude Loopback & Virtual Adapters)
 $LocalIP = Get-NetIPAddress -AddressFamily IPv4 |
@@ -53,7 +53,7 @@ if ($LocalIP) {
             Write-Host "`n  Nmap Scan Results " -NoNewline
             Write-Host "(Ports Found)" -ForegroundColor Cyan -NoNewline
             Write-Host "  "
-            Write-Host "----------------------------------" -ForegroundColor Magenta
+            Write-Host "-------------------------------------------" -ForegroundColor Magenta
 
             # Process each port entry
             foreach ($line in $Ports) {
@@ -82,5 +82,5 @@ if ($LocalIP) {
 }
 
 # Footer with Accents
-Write-Host "==================================" -ForegroundColor Magenta
+Write-Host "===========================================" -ForegroundColor Magenta
 Log-Message "Nmap Intense Port Scan completed"

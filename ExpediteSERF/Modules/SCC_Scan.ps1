@@ -30,7 +30,12 @@ Function Write-Message {
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $logEntry = "$timestamp [$Level] $Message"
     $logEntry | Out-File -FilePath $LogFile -Append
-    Write-Host "  $logEntry"
+    switch ($Level) {
+        "INFO" { Write-Host "  $timestamp [" -NoNewline; Write-Host "$Level" -ForegroundColor Yellow -NoNewline; Write-Host "] $Message" }
+        "SUCCESS" { Write-Host "  $timestamp [" -NoNewline; Write-Host "$Level" -ForegroundColor Green -NoNewline; Write-Host "] $Message" }
+        "ERROR" { Write-Host "  $timestamp [" -NoNewline; Write-Host "$Level" -ForegroundColor Red -NoNewline; Write-Host "] $Message" }
+        default { Write-Host $logEntry }
+    }
 }
 
 # Verify CSCC exists
@@ -49,11 +54,11 @@ if (!(Test-Path $OptionsFile)) {
 
 # Clean & Styled Header with Subtle Accents
 # Write-Message "Starting SCAP Compliance Scan"
-Write-Host "===================================" -ForegroundColor Magenta
+Write-Host "===========================================" -ForegroundColor Magenta
 Write-Host "  Starting " -NoNewline
 Write-Host "SCAP Compliance Scan" -ForegroundColor Cyan -NoNewline
 Write-Host "  "
-Write-Host "===================================" -ForegroundColor Magenta
+Write-Host "===========================================" -ForegroundColor Magenta
 
 # Start SCC scan in quiet mode (-q) to suppress all output
 $Process = Start-Process -FilePath $CSCCPath -ArgumentList "-o `"$OptionsFile`" -q" -NoNewWindow -PassThru
@@ -76,11 +81,11 @@ Start-Sleep -Seconds 2  # Simulate processing delay
 $LatestSession = Get-ChildItem -Path $SessionFolder -Directory | Sort-Object LastWriteTime -Descending | Select-Object -First 1
 
 if ($LatestSession) {
-    Write-Message "Report saved to: $LatestSession"
+    Write-Message "Report saved to: $LatestSession" "INFO"
 } else {
     Write-Message "SCAP scan ran, but no new session files were detected." "ERROR"
     Write-Host "`rSCAP scan ran, but no new session files were detected." -ForegroundColor Red
 }
 
 # Footer with Accents
-Write-Message "Completed SCAP Compliance Scan"
+Write-Message "Completed SCAP Compliance Scan" "SUCCESS"

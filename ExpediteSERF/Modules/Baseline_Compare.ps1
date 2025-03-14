@@ -23,10 +23,10 @@ Function Log-Message {
 
 # Display header
 Log-Message "Starting SERF Baseline and Results Comparison"
-Write-Host "`n==================================" -ForegroundColor Magenta
+Write-Host "`n===========================================" -ForegroundColor Magenta
 Write-Host "  Comparing " -NoNewline
 Write-Host "SERF Baseline & Results Files" -ForegroundColor Cyan
-Write-Host "----------------------------------" -ForegroundColor Magenta
+Write-Host "-------------------------------------------" -ForegroundColor Magenta
 
 # Ensure required folders exist
 if (!(Test-Path $BaselineFolder) -or !(Test-Path $ResultsFolder)) {
@@ -175,4 +175,4 @@ if (-not $FilesFound) {
 }
 
 # Footer with Accents
-Write-Host "==================================" -ForegroundColor Magenta
+Write-Host "===========================================" -ForegroundColor Magenta

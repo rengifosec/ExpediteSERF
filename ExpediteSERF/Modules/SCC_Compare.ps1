@@ -17,24 +17,24 @@ $LogPath = Join-Path -Path $ScriptRoot -ChildPath "Logs\"
 if (!(Test-Path $LogPath)) { New-Item -ItemType Directory -Path $LogPath | Out-Null }
 $LogFile = Join-Path -Path $LogPath -ChildPath "SCC_Compare.log"
 
-# Function to log messages
+# Function to log messages with different levels
 Function Log-Message {
     param (
         [string]$Message,
         [string]$Level = "INFO"
     )
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $logEntry = "$timestamp [$Level] $Message"
+    $logEntry = "  $timestamp [$Level] $Message"
     $logEntry | Out-File -FilePath $LogFile -Append
 }
 
 # Banner Output
 Log-Message "Starting SCAP Compliance Scan Comparison"
 Write-Host ""
-Write-Host "==========================================" -ForegroundColor Magenta
+Write-Host "===========================================" -ForegroundColor Magenta
 Write-Host "  Comparing " -NoNewline
 Write-Host "Recent SCAP Scans" -ForegroundColor Cyan
-Write-Host "==========================================" -ForegroundColor Magenta
+Write-Host "===========================================" -ForegroundColor Magenta
 
 # Function to find the two latest session folders and get their XML reports
 function Get-LatestReports {
@@ -163,7 +163,7 @@ Log-Message "Latest Scan: $($scanDetails1['Date']) | Score: $($scanDetails1['Sco
 Log-Message "Previous Scan: $($scanDetails2['Date']) | Score: $($scanDetails2['Score'])"
 Write-Host "`n  Latest Scan:   $($scanDetails1['Date']) | Score: $($scanDetails1['Score'])" -ForegroundColor Cyan
 Write-Host "  Previous Scan: $($scanDetails2['Date']) | Score: $($scanDetails2['Score'])"
-Write-Host "----------------------------------" -ForegroundColor Magenta
+Write-Host "-------------------------------------------" -ForegroundColor Magenta
 
 # Compare findings
 $orderedCategories = @("CAT I", "CAT II", "CAT III")
@@ -176,7 +176,7 @@ foreach ($category in $orderedCategories) {
         $differencesFound = $true
         Log-Message "$category Findings"
         Write-Host "$category Findings" -ForegroundColor Cyan
-        Write-Host "----------------------------------" -ForegroundColor Magenta
+        Write-Host "-------------------------------------------" -ForegroundColor Magenta
         Write-Host "New Findings:" -ForegroundColor Red
         $newFindings | Sort-Object | ForEach-Object { Write-Host "  - $_"; Log-Message "New Finding: $_" }
 
@@ -202,5 +202,5 @@ if (-not $differencesFound) {
 }
 
 # Footer with Accents
-Write-Host "==========================================" -ForegroundColor Magenta
+Write-Host "===========================================" -ForegroundColor Magenta
 Log-Message "Completed SCAP Compliance Scan Comparison"
