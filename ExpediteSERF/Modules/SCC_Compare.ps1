@@ -36,34 +36,31 @@ Write-Host "  Comparing " -NoNewline
 Write-Host "Recent SCAP Scans" -ForegroundColor Cyan
 Write-Host "===========================================" -ForegroundColor Magenta
 
-# Function to find the two latest session folders and get their XML reports
+# Updated function to find the two latest session folders and get both their XML and HTML reports
 function Get-LatestReports {
     param ([string]$Path)
     
-    # Get the two latest session folders
+    # Get the two latest session folders (assuming folder names sort as timestamps)
     $latestSessions = Get-ChildItem -Path $Path -Directory | Sort-Object Name -Descending | Select-Object -First 2
     
-    $reportFiles = @()
-    
-    foreach ($session in $latestSessions) {
-        # Look for the XML report
-        $xmlReport = Get-ChildItem -Path "$($session.FullName)\Results\SCAP\XML" -Filter "*.xml" -ErrorAction SilentlyContinue
+    $reportObjects = foreach ($session in $latestSessions) {
+        # Build paths for the XML reports and the HTML Non-Compliance report
+        $xmlPath = Join-Path -Path $session.FullName -ChildPath "Results\SCAP\XML"
+        $htmlPath = Join-Path -Path $session.FullName -ChildPath "Results\SCAP"
+        
+        $xmlReport = Get-ChildItem -Path $xmlPath -Filter "*.xml" -ErrorAction SilentlyContinue | Select-Object -First 1
+        $htmlReport = Get-ChildItem -Path $htmlPath -Filter "*Non-Compliance*.html" -ErrorAction SilentlyContinue | Select-Object -First 1
+        
         if ($xmlReport) {
-            $reportFiles += $xmlReport
+            [PSCustomObject]@{
+                SessionFolder = $session.FullName
+                XMLReport     = $xmlReport
+                HTMLReport    = $htmlReport
+            }
         }
     }
     
-    return $reportFiles | Sort-Object LastWriteTime -Descending | Select-Object -First 2
-}
-
-# Function to find any "Non-Compliance" report dynamically
-function Get-NonComplianceReport {
-    param ([string]$SessionPath)
-
-    # Look for any file with "Non-Compliance" in its name inside \Results\SCAP\
-    $htmlReport = Get-ChildItem -Path "$SessionPath\Results\SCAP" -Filter "*Non-Compliance*.html" -ErrorAction SilentlyContinue | Select-Object -First 1
-
-    return $htmlReport
+    return $reportObjects | Sort-Object { $_.XMLReport.LastWriteTime } -Descending | Select-Object -First 2
 }
 
 # Function to extract scan details and compliance score
@@ -96,7 +93,7 @@ function Extract-ScanDetails {
     return @{ "Date" = "$scanDate - $scanTime"; "Score" = $score; "FilePath" = $ReportPath }
 }
 
-# Function to extract findings with V-ID and descriptions
+# Function to extract findings with V-ID and brief descriptions
 function Extract-Findings {
     param ([string]$ReportPath)
     
@@ -125,9 +122,11 @@ function Extract-Findings {
             $vulnID = $ruleID
         }
 
-        # Store failed findings
+        # Store failed findings with brief descriptions
         if ($result -eq "fail") {
-            $finding = "$($vulnID): $($title)"
+            $briefTitle = ($title -split ' ')[0..9] -join ' '
+            if (($title -split ' ').Count -gt 10) { $briefTitle += '...' }
+            $finding = "$($vulnID): $($briefTitle)"
             switch ($severity) {
                 "high" { $findings["CAT I"] += $finding }
                 "medium" { $findings["CAT II"] += $finding }
@@ -139,7 +138,7 @@ function Extract-Findings {
     return $findings
 }
 
-# Get the two latest reports from session folders
+# Get the two latest reports from session folders (with both XML and HTML reports)
 $latestReports = Get-LatestReports -Path $ResultsPath
 
 if ($latestReports.Count -lt 2) {
@@ -148,15 +147,11 @@ if ($latestReports.Count -lt 2) {
     exit
 }
 
-# Extract scan details and findings from both reports
-$scanDetails1 = Extract-ScanDetails -ReportPath $latestReports[0].FullName
-$scanDetails2 = Extract-ScanDetails -ReportPath $latestReports[1].FullName
-$extractedFindings1 = Extract-Findings -ReportPath $latestReports[0].FullName
-$extractedFindings2 = Extract-Findings -ReportPath $latestReports[1].FullName
-
-# Determine session paths for HTML report retrieval
-$latestSessionPath = Split-Path -Parent $latestReports[0].FullName
-$nonComplianceReport = Get-NonComplianceReport -SessionPath $latestSessionPath
+# Extract scan details and findings from both XML reports
+$scanDetails1 = Extract-ScanDetails -ReportPath $latestReports[0].XMLReport.FullName
+$scanDetails2 = Extract-ScanDetails -ReportPath $latestReports[1].XMLReport.FullName
+$extractedFindings1 = Extract-Findings -ReportPath $latestReports[0].XMLReport.FullName
+$extractedFindings2 = Extract-Findings -ReportPath $latestReports[1].XMLReport.FullName
 
 # Print scan details
 Log-Message "Latest Scan: $($scanDetails1['Date']) | Score: $($scanDetails1['Score'])"
@@ -182,13 +177,13 @@ foreach ($category in $orderedCategories) {
 
         $recurringFindings = $extractedFindings1[$category] | Where-Object { $_ -in $extractedFindings2[$category] }
         if ($recurringFindings.Count -gt 0) {
-            Write-Host "Recurring Findings (Still Present):" -ForegroundColor Yellow
+            Write-Host "`nRecurring Findings (Still Present):" -ForegroundColor Yellow
             $recurringFindings | Sort-Object | ForEach-Object { Write-Host "  - $_"; Log-Message "Recurring Finding: $_" }
         }
 
         $resolvedFindings = $extractedFindings2[$category] | Where-Object { $_ -notin $extractedFindings1[$category] }
         if ($resolvedFindings.Count -gt 0) {
-            Write-Host "Resolved Findings (Previously Failed, Now Passed):" -ForegroundColor Green
+            Write-Host "`nResolved Findings (Previously Failed, Now Passed):" -ForegroundColor Green
             $resolvedFindings | Sort-Object | ForEach-Object { Write-Host "  - $_"; Log-Message "Resolved Finding: $_" }
         }
         Write-Host ""
@@ -204,3 +199,52 @@ if (-not $differencesFound) {
 # Footer with Accents
 Write-Host "===========================================" -ForegroundColor Magenta
 Log-Message "Completed SCAP Compliance Scan Comparison"
+
+# Prompt to open the latest HTML Non-Compliance report for detailed review
+# Prompt to open the latest HTML Non-Compliance report for detailed review
+if ($differencesFound) {
+    Write-Host "`nDo you want to open the latest HTML Non-Compliance report for detailed review? (Y/N)" -ForegroundColor Yellow
+    $Response = Read-Host
+    if ($Response -match "^[Yy]$") {
+        if ($latestReports[0].HTMLReport) {
+
+            # Build an array of new V-IDs from all categories
+            $allNewVIDs = @()
+            foreach ($category in $orderedCategories) {
+                $catNewFindings = $extractedFindings1[$category] | Where-Object { $_ -notin $extractedFindings2[$category] }
+                foreach ($finding in $catNewFindings) {
+                    # Assume the finding format is "V-XXXXXX: description..."
+                    if ($finding -match '^(V-\d+):') {
+                        $vid = $matches[1]
+                        $allNewVIDs += $vid
+                    }
+                }
+            }
+            $allNewVIDs = $allNewVIDs | Sort-Object -Unique
+
+            # Read the HTML content
+            $htmlFilePath = $latestReports[0].HTMLReport.FullName
+            $htmlContent = Get-Content -Path $htmlFilePath -Raw
+            
+            # For each new V-ID, wrap any occurrence with a highlighting span tag.
+            foreach ($vid in $allNewVIDs) {
+                # This regex finds the V-ID and wraps it in a span with yellow background
+                $pattern = "\b" + [regex]::Escape($vid) + "\b"
+                $replacement = '<span style="color: #B026FF; font-style: italic">' + $vid + '</span>'
+                $htmlContent = $htmlContent -replace $pattern, $replacement
+            }
+            
+            # Save the modified HTML to a temporary file
+            $tempHtmlFile = Join-Path -Path $env:TEMP -ChildPath "SCAP_NonCompliance_Highlighted.html"
+            Set-Content -Path $tempHtmlFile -Value $htmlContent
+            
+            Write-Host "`nOpening HTML report for detailed review... New findings highlighted in " -NoNewline
+            Write-Host "purple" -ForegroundColor Magenta
+
+            Start-Process $tempHtmlFile
+        } else {
+            Write-Host "`nHTML Non-Compliance report not found for the latest session." -ForegroundColor Red
+        }
+    }
+}
+
