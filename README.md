@@ -2,7 +2,7 @@
 
 ExpediteSERF is a comprehensive cybersecurity scanning workflow that automates the execution of various security checks, including SCAP Compliance Checker scans, comparisons, baseline captures, and port scans. This tool is designed to streamline the process of identifying and addressing security vulnerabilities in your systems.
 
-![ExpediteSERF](./assets/expediteserf.png)
+![ExpediteSERF](./Resources/banner.png)
 
 ## Features
 
