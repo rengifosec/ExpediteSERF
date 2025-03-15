@@ -15,8 +15,8 @@ ExpediteSERF is a comprehensive cybersecurity scanning workflow that automates t
 ## Prerequisites
 
 - PowerShell 7
-- SCAP Compliance Checker 5.7.1
-- Nmap
+- SCAP Compliance Checker 
+- Nmap (For Port Scan Module)
 
 ## Directory Structure
 
@@ -66,6 +66,7 @@ Run the `ExpediteSERF.bat` script with the desired options. If no options are pr
 - `-b` : Run SERF Capture only.
 - `-d` : Run Baseline Compare only.
 - `-n` : Run Port Scan only.
+- `-i` : Run SCC Scan & SERF Capture to create the baseline.
 - `-h` : Display detailed help and usage information.
 
 ### Examples
@@ -117,10 +118,6 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 ## License
 
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-For any questions or issues, please contact Alejandro Rengifo at [your-email@example.com].
 
 ## Acknowledgements
 
