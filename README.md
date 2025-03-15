@@ -93,9 +93,9 @@ ExpediteSERF.bat -h
 
 1. **Pre-Installation Steps**: Before installing any new software, perform any pre-installation steps required by your organization. This may include running a threat scan with your antivirus software to ensure the system is clean.
 
-2. **Run Baseline Capture**: Before installing any new software, run the SERF Capture module to capture the current baseline of your system. This will create a snapshot of installed patches, programs, groups, services, and local accounts.
+2. **Run Baseline Capture**: Before installing any new software, run the `-i` flag to create a baseline of your system. This will create a snapshot of installed patches, programs, groups, services, and local accounts and a fresh SCAP scan.
     ```sh
-    ExpediteSERF.bat -b
+    ExpediteSERF.bat -i
     ```
 
 3. **Install Software**: Install the new software or program as required.
